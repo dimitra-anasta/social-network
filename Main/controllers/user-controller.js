@@ -44,8 +44,9 @@ const userController = {
     .then((user) => 
     !user
     ? res.status(404).json({ message: 'No such user exists' })
-    : Thought.deleteMany(({ _id: { $in: user.thoughts }})))
- }
+    : Thought.deleteMany({ _id: { $in: user.thoughts }})
+    )
+ },
 };
 
 module.exports = userController;

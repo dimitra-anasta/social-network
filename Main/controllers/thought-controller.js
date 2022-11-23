@@ -50,6 +50,32 @@ updateThought(req, res) {
     )
     .catch((err) => res.status(500).json(err));
 },
+addThoughtReaction(req, res) {
+    Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $addToSet: { responses: req.body } },
+        { runValidators: true, new: true }        
+    )
+    .then((thought) =>
+    !thought
+    ? res.status(404).json({ message: 'No thought with this ID' })
+    : res.json(thought)
+    )
+    .catch((err) => res.status(500).json(err));
+ },
+ removeThoughtReaction(req, res) {
+    Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $pull: { reactions: {respsonseId: req.params.responseId } } },
+        { runValidators: true, new: true }
+        )
+        .then((thought) =>
+        !thought
+        ? res.status(404).json({ message: 'No thought with this ID' })
+        : res.json(thought)
+        )
+        .catch((err) => res.status(500).json(err));
+ },
 };
 
 module.exports = thoughtController;
