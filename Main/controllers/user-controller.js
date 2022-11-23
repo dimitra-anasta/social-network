@@ -47,6 +47,38 @@ const userController = {
     : Thought.deleteMany({ _id: { $in: user.thoughts }})
     )
  },
+ addNewFriend(req, res) {
+    console.log('You are adding a frined to your friend list');
+    console.log(req.body);
+    User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $addToSet: { friends: req.body } },
+        { runValidators: true, new: true }
+        )
+        .then((user) => 
+        !user
+        ? res
+        .status(404)
+        .json({ message: 'No user found with that ID '})
+        : res.json(user)
+        )
+        .catch((err) => res.status(500).json(err));
+ },
+ removeFriend(req, res) {
+    User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friend: { friendId: req.params.friendId } } },
+        { runValidators: true, new: true }
+    )
+    .then((user) => 
+    !user
+    ? res
+    .status(404)
+    .json({ message: 'No user found with that ID' })
+    : res.json(user)
+    )
+    .catch((err) => res.status(500).json(err));
+ },
 };
 
 module.exports = userController;
