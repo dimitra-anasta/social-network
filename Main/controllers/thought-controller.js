@@ -19,10 +19,12 @@ getSingleThought(req,res) {
 },
 createThought(req, res) {
     Thought.create(req.body)
-    .then((thought) => res.json(thought))
-    .catch((err) => {
-        console.log(err);
-       return res.status(500).json(err);
+    .then((thought) => {
+        return User.findOneAndUpdate(
+            { _id: req.body.userId }, 
+            { $addToSet: { thoughts: thought._id }},
+            { new: true }
+        );
 });
 },
 deleteThought(req, res) {
@@ -33,6 +35,19 @@ deleteThought(req, res) {
     : User.deleteMany({ _id: {$in: thought.thoughts }})
     )
     .then(() => res.json({ message: 'Thoughts and User deleted'}))
+    .catch((err) => res.status(500).json(err));
+},
+updateThought(req, res) { 
+    Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $set: req.body },
+        { runValidators: true, new: true }
+    )
+    .then((thought) =>
+    !thought
+    ? res.status(404).json({ message: 'No thought with this ID' })
+    : res.json(thought)
+    )
     .catch((err) => res.status(500).json(err));
 },
 };
