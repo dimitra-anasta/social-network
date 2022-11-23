@@ -13,17 +13,15 @@ const thoughtSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now(),
-            timestamps: true,
-            toJSON: { getters: true, virtuals: true },
+            dateFormat,
+            // timestamps: true,
+            // toJSON: { getters: true, virtuals: true },
         },
         username: {
             type: String,
             required: true,
         },
-        reactions: [{
-
-        }]
-
+        reactions: [reactionSchema],
     }
  
 );
