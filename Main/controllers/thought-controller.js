@@ -53,7 +53,7 @@ updateThought(req, res) {
 addThoughtReaction(req, res) {
     Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
-        { $addToSet: { responses: req.body } },
+        { $addToSet: { reactions: req.body } },
         { runValidators: true, new: true }        
     )
     .then((thought) =>
@@ -66,7 +66,7 @@ addThoughtReaction(req, res) {
  removeThoughtReaction(req, res) {
     Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
-        { $pull: { reactions: {respsonseId: req.params.responseId } } },
+        { $pull: { reactions: {reactionId: req.params.reactionId } } },
         { runValidators: true, new: true }
         )
         .then((thought) =>
