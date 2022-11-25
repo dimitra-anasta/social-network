@@ -52,7 +52,7 @@ const userController = {
     console.log(req.body);
     User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $addToSet: { friends: req.params.use } },
+        { $addToSet: { friends: req.params.friendId } },
         { runValidators: true, new: true }
         )
         .then((user) => 
